@@ -1,3 +1,5 @@
+from datetime import timezone
+
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -43,7 +45,7 @@ CHOISE = [(news, 'новость'), (post, 'статья')]
 class Post(models.Model):
 
 
-    time_in = models.DateTimeField(auto_now_add=True)
+    time_in = models.DateTimeField(auto_now_add=True )
     news_post = models.CharField(max_length=2 , choices=CHOISE )
     title = models.CharField(max_length=200 , default= 'без заголовка')
     text = models.TextField()
@@ -63,6 +65,9 @@ class Post(models.Model):
         else:
             return self.text
 
+    def __str__(self):
+        return f'{self.time_in}:{self.title.title()}: {self.preview()}'
+
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete= models.CASCADE)
@@ -79,3 +84,5 @@ class Comment(models.Model):
     def dislike(self):
         self.comment_rating = self.comment_rating - 1
         self.save()
+    def __str__(self):
+        return f'{self.time_in}:{self.text}'
