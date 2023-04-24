@@ -8,7 +8,17 @@ Post/news
 
 {% block content %}
    <h1>Новости / Статьи</h1>
+{# Добавляем форму, которая объединяет набор полей, которые будут отправляться в запросе #}
+   <form action="" method="get">
+       <input type="date" id="start" name="widgets"/>
+       value="2018-07-22"
+       min="2018-01-01" max="2018-12-31">
+       {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+       {{ filterset.form.as_p}}
 
+       {# Добавим кнопку отправки данных формы #}
+       <input type="submit" value="Найти" />
+   </form>
 
 
 
@@ -58,4 +68,3 @@ Post/news
    {% endif %}
 
 {% endblock content %}
-
