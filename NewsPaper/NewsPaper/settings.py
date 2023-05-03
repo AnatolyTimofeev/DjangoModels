@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-)ypqwi_t6k@y#-axlmy---fxkyaumunzm^k=k)44_7q6oz!642
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# LOGIN_URL = '/login/'
 
 
 # Application definition
@@ -43,6 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'news',
     'django_filters',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.google',
+    'sign',
+    'protect',
 
 ]
 SITE_ID = 1
@@ -74,6 +82,28 @@ TEMPLATES = [
         },
     },
 ]
+AUTHENTICATION_BACKENDS = [
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+LOGIN_URL = '/accounts/login/'
+
+LOGIN_REDIRECT_URL = '/'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
+
+
+
 
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
