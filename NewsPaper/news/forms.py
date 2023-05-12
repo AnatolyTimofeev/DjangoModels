@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Category, PostCategory
 from django.core.exceptions import ValidationError
 
 
@@ -13,7 +13,10 @@ class NewsForm(forms.ModelForm):
                  'author',
 
        ]
-
+class CatForms(forms.ModelForm):
+    class Meta:
+        model = PostCategory
+        fields =['category',]
 
    # def clean(self):
    #     cleaned_data = super().clean()

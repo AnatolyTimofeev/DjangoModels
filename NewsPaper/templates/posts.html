@@ -16,12 +16,15 @@ Post/news
    {% if posts %}
        <table>
            <tr> всего новостей - {{posts| length}}</tr>
+
+
            <tr>
                <td>Заголовок</td>
                <td>Время поста</td>
                <td>текст</td>
                <td>автор</td>
                <td>рейтинг</td>
+               <td>категория</td>
            </tr>
 
            {% for post in posts %}
@@ -31,6 +34,9 @@ Post/news
                <td>{{ post.text | truncatewords:10 | censor}}</td>
                <td>{{ post.author.user.username}}</td>
                <td>{{ post.post_rating}}</td>
+               <td>{{post.cat}}</td>
+<!--               <td>{{post}}</td>-->
+
            </tr>
            {% endfor %}
 

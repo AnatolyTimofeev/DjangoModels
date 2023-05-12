@@ -42,7 +42,8 @@ INSTALLED_APPS = [
 # подключаем ещё приложения
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'news',
+    # 'news',
+    'news.apps.NewsConfig',
     'django_filters',
     'allauth',
     'allauth.account',
@@ -51,8 +52,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'sign',
     'protect',
+    'django_apscheduler',
 
 ]
+DEFAULT_FROM_EMAIL = 'stoliktimofeev@ya.ru'
 SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -160,3 +163,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@ya.ru'
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds

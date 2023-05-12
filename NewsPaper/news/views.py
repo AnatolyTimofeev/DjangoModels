@@ -1,14 +1,18 @@
 # Импортируем класс, который говорит нам о том,
 # что в этом представлении мы будем выводить список объектов из БД
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.core.mail import send_mail
+
+from django.shortcuts import redirect, render
+from .signals import postlimit, limit_post_signal
 
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,FormView
 
-from .forms import NewsForm
-from .models import Post
+from .forms import NewsForm, CatForms
+from .models import Post, Category
 from .filters import PostFilter
-
 
 class PostList(ListView):
 
@@ -66,6 +70,25 @@ class NewsCreate(PermissionRequiredMixin,CreateView):
         news= form.save(commit=False)
         news.news_post = 'NW'
         return super().form_valid(form)
+
+    def post(self,request, *args, **kwargs):
+        cat_id = request.POST.get('category')
+        category = Category.objects.get(id=cat_id)
+        list_= list(category.subscribers.values('email'))
+        emaillist = []
+        for i in list_:
+            emaillist.append(i['email'])
+        send_mail(
+            subject=f' новая новость в категории -{category}',
+            message='спасибо что подписались',
+            from_email='stoliktimofeev@ya.ru',
+            recipient_list=emaillist,
+        )
+        return super().post(request, *args, **kwargs)
+
+
+    
+
 class PostCreate(PermissionRequiredMixin,CreateView):
     permission_required = ('news.add_post',)
     form_class = NewsForm
@@ -91,3 +114,34 @@ class PostDelete(PermissionRequiredMixin, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
+
+class Category_list_view(ListView):
+    model = Category
+    template_name = 'category_list.html'
+    context_object_name = 'category_list'
+
+def subscribe_me(request):
+    if request.method =='POST':
+        user = request.user
+        form = CatForms()
+        cat_id = request.POST.get('category')
+        category = Category.objects.get(id=cat_id)
+        category.subscribers.add(user)
+        send_mail(
+            subject = f'{user.username} вы подписались на категорию -{category}',
+            message = 'спасибо что подписались',
+            from_email = 'stoliktimofeev@ya.ru',
+            recipient_list = [user.email],
+
+        )
+
+    else:
+        form = CatForms()
+    return render(request,'category_list.html',{'form':form})
+
+
+
+
+
+
+
