@@ -1,10 +1,16 @@
 from django import forms
-from .models import Post, Category, PostCategory
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+
+from .models import Post, Category, PostCategory, Author
 from django.core.exceptions import ValidationError
 
 
 class NewsForm(forms.ModelForm):
-   class Meta:
+
+
+    class Meta:
        model = Post
        fields = [
                  'title',
@@ -12,7 +18,9 @@ class NewsForm(forms.ModelForm):
                  'category',
                  'author',
 
+
        ]
+
 class CatForms(forms.ModelForm):
     class Meta:
         model = PostCategory

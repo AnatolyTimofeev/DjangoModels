@@ -3,6 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
+from .tasks import send_email_task
 
 from django.shortcuts import redirect, render
 from .signals import postlimit, limit_post_signal
@@ -11,7 +12,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView,FormView
 
 from .forms import NewsForm, CatForms
-from .models import Post, Category
+from .models import Post, Category, Author
 from .filters import PostFilter
 
 class PostList(ListView):
@@ -56,6 +57,7 @@ class SearchList(ListView):
         context = super().get_context_data(**kwargs)
         # Добавляем в контекст объект фильтрации.
         context['filterset'] = self.filterset
+
         return context
 
 
@@ -66,28 +68,23 @@ class NewsCreate(PermissionRequiredMixin,CreateView):
     template_name = 'news_edit.html'
     success_url = reverse_lazy('post_list')
 
+    def get_initial(self):
+        # Get the initial dictionary from the superclass method
+        initial = super(NewsCreate, self).get_initial()
+        # Copy the dictionary so we don't accidentally change a mutable dict
+        initial = initial.copy()
+        initial['author'] = self.request.user.pk
+        return initial
+
     def form_valid(self, form):
-        news= form.save(commit=False)
-        news.news_post = 'NW'
+
+        self.objects= form.save(commit=False)
+        self.objects.news_post = 'NW'
+        self.objects.author = Author.objects.get(pk= self.request.user.id)
+        cat_id = self.request.POST.get('category')
+        send_email_task.delay(cat_id)
         return super().form_valid(form)
 
-    def post(self,request, *args, **kwargs):
-        cat_id = request.POST.get('category')
-        category = Category.objects.get(id=cat_id)
-        list_= list(category.subscribers.values('email'))
-        emaillist = []
-        for i in list_:
-            emaillist.append(i['email'])
-        send_mail(
-            subject=f' новая новость в категории -{category}',
-            message='спасибо что подписались',
-            from_email='stoliktimofeev@ya.ru',
-            recipient_list=emaillist,
-        )
-        return super().post(request, *args, **kwargs)
-
-
-    
 
 class PostCreate(PermissionRequiredMixin,CreateView):
     permission_required = ('news.add_post',)
@@ -130,7 +127,7 @@ def subscribe_me(request):
         send_mail(
             subject = f'{user.username} вы подписались на категорию -{category}',
             message = 'спасибо что подписались',
-            from_email = 'stoliktimofeev@ya.ru',
+            from_email = 'stoliktimofeev@gmail.com',
             recipient_list = [user.email],
 
         )

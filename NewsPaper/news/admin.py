@@ -1,5 +1,5 @@
 from django.contrib import admin
-from news.models import Author, Post, Category,Comment
+from .models import Author, Post, Category,Comment
 
 
 admin.site.register(Author)
