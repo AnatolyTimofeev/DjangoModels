@@ -11,7 +11,7 @@ from news.models import Author
 class BaseRegisterView(CreateView):
     model = User
     form_class = BaseRegisterForm
-    success_url = '/'
+    success_url = '/accounts/'
 
 @login_required
 def upgrade_me(request):

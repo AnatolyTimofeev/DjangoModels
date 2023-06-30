@@ -31,6 +31,7 @@ Post/news
                <td>Время поста</td>
                <td>текст</td>
                <td>автор</td>
+               <td>категория</td>
                <td>рейтинг</td>
            </tr>
 
@@ -40,6 +41,7 @@ Post/news
                <td>{{ post.time_in |date:'d m y'}}</td>
                <td>{{ post.text | truncatewords:10 | censor}}</td>
                <td>{{ post.author.user.username}}</td>
+               <td>{{ post.category.first}}</td>
                <td>{{ post.post_rating}}</td>
            </tr>
            {% endfor %}

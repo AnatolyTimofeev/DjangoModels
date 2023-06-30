@@ -34,7 +34,7 @@ Post/news
                <td>{{ post.text | truncatewords:10 | censor}}</td>
                <td>{{ post.author.user.username}}</td>
                <td>{{ post.post_rating}}</td>
-               <td>{{post.cat}}</td>
+               <td>{{post.category.first}}</td>
 <!--               <td>{{post}}</td>-->
 
            </tr>

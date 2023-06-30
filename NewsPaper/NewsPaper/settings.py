@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import logging
 from pathlib import Path
 import os
 
@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)ypqwi_t6k@y#-axlmy---fxkyaumunzm^k=k)44_7q6oz!642'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
 # LOGIN_URL = '/login/'
@@ -115,10 +115,18 @@ WSGI_APPLICATION = 'newspaper.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'postgres',
+                'USER': 'postgres',
+                'PASSWORD': 'postgres',
+                'HOST': 'localhost',
+                'PORT': '5432',
+            },
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 }
 
 
@@ -164,6 +172,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+ADMINS = (
+    ('admin', 'stolik@sampo.ru'),
+)
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'stoliktimofeev'
@@ -174,8 +186,96 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER + '@gmail.com'
 APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
-CELERY_BROKER_URL = 'redis://default:пароль@redis-10844.c245.us-east-1-3.ec2.cloud.redislabs.com:10844'
-CELERY_RESULT_BACKEND = 'redis://default:пароль!@redis-10844.c245.us-east-1-3.ec2.cloud.redislabs.com:10844'
+CELERY_BROKER_URL = 'redis://default:4vKouTLHzVMVy47GbYFJ!@redis-10844.c245.us-east-1-3.ec2.cloud.redislabs.com:10844'
+CELERY_RESULT_BACKEND = 'redis://default:4vKouTLHzVMVy47GbYFJ!@redis-10844.c245.us-east-1-3.ec2.cloud.redislabs.com:10844'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+    }
+}
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'main_formatter',
+        },
+        'general_file': {
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'level': 'INFO',
+            'formatter': 'general_formatter',
+        },
+        'errors_file': {
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'level': 'ERROR',
+            'formatter': 'errors_formatter',
+        },
+        'security_file': {
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+
+            'formatter': 'general_formatter',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+            'formatter': 'general_formatter',
+        },
+    },
+    'formatters': {
+        'main_formatter': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s',
+        },
+        'general_formatter': {
+            'format': '%(asctime)s [%(levelname)s] %(module)s: %(message)s',
+        },
+        'errors_formatter': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s\n%(pathname)s\n%(exc_info)s',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'general_file', 'errors_file'],
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['errors_file','mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.server': {
+            'handlers': ['errors_file','mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.template': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+        },
+        'django.db.backends': {
+            'handlers': ['errors_file'],
+            'level': 'ERROR',
+        },
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+        },
+    },
+    'filters': {
+        'warning_filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': lambda record: record.levelno >= logging.WARNING,
+        },
+        'error_filter': {
+            '()': 'django.utils.log.CallbackFilter',
+            'callback': lambda record: record.levelno >= logging.ERROR,
+        },
+    },
+}

@@ -11,6 +11,7 @@ class PostFilter(FilterSet):
            'title': ['icontains'],
            'author__user__username': ['icontains'],
            'time_in':['lt'],
+           'category__category_name':['icontains'],
 
        }
        widgets = {'time_in': widgets.DateInput}

@@ -1,5 +1,6 @@
 from datetime import timezone
 
+from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -43,7 +44,7 @@ class Category(models.Model):
     subscribers = models.ManyToManyField(User, related_name='subscribers')
 
     def __str__(self):
-        return self.category_name.title()
+        return self.category_name
 
 news = 'NW'
 post = 'PT'
@@ -71,16 +72,20 @@ class Post(models.Model):
         else:
             return self.text
     def cat(self):
-        cat = self.category.all().values_list('category_name', flat=True)
+        cat = self.category.all().values_list('category_name', flat=True)[0]
         return cat
 
 
     def __str__(self):
-        return f'{self.time_in}:{self.title.title()}: {self.preview()}:{self.category}'
+        return f'{self.time_in}:{self.title.title()}: {self.preview()}:{self.cat()}'
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'post-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete= models.CASCADE)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE,related_name='cate')
 
 
 

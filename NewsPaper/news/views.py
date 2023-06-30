@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.mail import send_mail
 from .tasks import send_email_task
+from django.core.cache import cache
 
 from django.shortcuts import redirect, render
 from .signals import postlimit, limit_post_signal
@@ -15,22 +16,44 @@ from .forms import NewsForm, CatForms
 from .models import Post, Category, Author
 from .filters import PostFilter
 
-class PostList(ListView):
-
+class PostList(ListView): # общий класс отображения на странице всех новостей и статей
     model = Post
     ordering = '-time_in'
     template_name = 'posts.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 10
 
+class NewsList(PostList):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(news_post='NW')
+class NewsPostList(PostList):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(news_post='PT')
 
-class PostDetail(DetailView):
-    # Модель всё та же, но мы хотим получать информацию по отдельному товару
+class PostDetail(DetailView): #общий класс детальной страницы и для новости и для статьи
     model = Post
-    # Используем другой шаблон — product.html
     template_name = 'post.html'
-    # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'post'
+    # def get_object(self, *args, **kwargs):
+    #     obj = cache.get(f'post-{self.kwargs["pk"]}',
+    #                     None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+    #     if not obj:
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'post-{self.kwargs["pk"]}', obj)
+    #     return obj
+class NewsPostDetail(PostDetail):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(news_post='NW')
+
+class PostPostDetail(PostDetail):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(news_post='PT')
+
 
 class SearchList(ListView):
     model = Post
