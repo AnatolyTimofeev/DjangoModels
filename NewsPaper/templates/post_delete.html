@@ -1,0 +1,16 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1>Удаление новости/статьи</h1>
+<H1>{{ post.title}}</H1>
+<H5>{{ post.time_in |date:'d M Y'}}</H5>
+<H5>post rating {{post.post_rating}}</H5>
+<H5>автор - {{post.author.user.username }}</H5>
+
+<hr>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Удаляем "{{ object.name }}"?</p>
+    <input type="submit" value="Delete" />
+</form>
+{% endblock content %}

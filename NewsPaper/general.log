@@ -1,0 +1,26 @@
+2023-06-29 19:00:51,982 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 19:02:17,466 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 19:02:27,393 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 19:10:18,072 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 20:44:32,414 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 20:44:37,454 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 20:50:44,313 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:01:17,940 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 21:01:24,505 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:02:27,028 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 21:02:32,081 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:02:59,464 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 21:03:04,443 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:03:57,634 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\newspaper\settings.py changed, reloading.
+2023-06-29 21:04:01,319 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:10:12,380 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:15:48,329 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\news\views.py changed, reloading.
+2023-06-29 21:15:52,501 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:17:10,605 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\news\views.py changed, reloading.
+2023-06-29 21:17:14,975 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:17:53,276 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\news\views.py changed, reloading.
+2023-06-29 21:17:57,345 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:30:27,571 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\news\views.py changed, reloading.
+2023-06-29 21:30:31,914 [INFO] autoreload: Watching for file changes with StatReloader
+2023-06-29 21:31:28,009 [INFO] autoreload: C:\Users\stolik\PycharmProjects\startapp_news\NewsPaper\news\views.py changed, reloading.
+2023-06-29 21:31:33,174 [INFO] autoreload: Watching for file changes with StatReloader

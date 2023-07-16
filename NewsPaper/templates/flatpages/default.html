@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> {% block title %} {{ flatpage.title }} {% endblock title %}</title>
+
+
+</head>
+<body>
+    <h2>"это написано в default.html"</h2>
+    {% block content %}
+    {{ flatpage.content }}
+    {% endblock content %}
+</body>
+</html>
