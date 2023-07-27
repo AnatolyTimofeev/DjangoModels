@@ -11,6 +11,8 @@ class PerevalAdded(models.Model):
     data_added = models.DateTimeField(auto_now_add=True)
     raw_data = models.JSONField()
     images = models.JSONField()
+    user = models.JSONField()
+    user_email = models.JSONField()
     class Meta:
         db_table = 'pereval_added'
 

@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from turists.views import PerevalAddedAPI
+from turists.views import PerevalAddedAPI, PerevalAddedUpdateAPI, PerevalAddedDetailAPI, PerevalListAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', PerevalAddedAPI.as_view()),
+    path('api/v1/patch/<int:pk>/', PerevalAddedUpdateAPI.as_view()),
+    path('api/v1/get/<int:pk>/', PerevalAddedDetailAPI.as_view()),
+    path('api/v1/get/', PerevalListAPI.as_view()),
 ]
