@@ -25,7 +25,7 @@ pip install https://github.com/AnatolyTimofeev/DjangoModels/tree/main/virtstage
 
 ```
 ## Взаимодействие с API
-+[X]  /api/v1/ - создание перевала методом POST
++ [X]  /api/v1/ - создание перевала методом POST
 + [X] /api/v1/patch/pk - обновление данных методом PACTH
 + [X] /api/v1/get/pk - детальная информация о перевале GET
 + [X] /api/v1/get/?user_email=user@email.ru - GET запрос для получения данных по email
