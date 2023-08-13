@@ -24,8 +24,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content_text = models.TextField()
-    photo = models.ImageField(upload_to='photos/')
-    video = models.FileField(upload_to='videos/')
+    photo = models.ImageField(upload_to='photos/', blank=True)
+    video = models.FileField(upload_to='videos/' , blank= True)
     created_at = models.DateTimeField(auto_now_add=True)
     categories = models.ManyToManyField(Category, related_name='posts')
 

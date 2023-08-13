@@ -20,8 +20,8 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content_text', 'photo', 'video','categories']
-    photo = forms.ImageField(required=False)
-    video = forms.FileField(required=False)
+    # photo = forms.ImageField(required=False)
+    # video = forms.FileField(required=False)
 
 class ReplyForm(forms.ModelForm):
     class Meta:

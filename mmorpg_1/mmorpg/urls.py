@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path, include
 
 from newsportal.views import UserRegisterView, verify_code, UserProfileView, UserLoginView, PostCreateView, \
-    PostListView, ReplyCreateView, delete_reply, accept_reply
+    PostListView, ReplyCreateView, delete_reply, accept_reply, PostUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -20,6 +20,7 @@ urlpatterns = [
     path('reply/create/<int:post_id>/', ReplyCreateView.as_view(), name='create_reply'),
     path('delete_reply/<int:pk>/', delete_reply, name='delete_reply'),
     path('accept_reply/<int:pk>/', accept_reply, name='accept_reply'),
+    path('posts/update/<int:pk>/', PostUpdateView.as_view(), name='post_update'),
 
 ]
 if settings.DEBUG:

@@ -1,16 +1,19 @@
 import random
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.sessions.models import Session
 
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django import forms
+from django.http import HttpResponseForbidden
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from newsportal.forms import RegisterUserForm, VerificationCodeForm, PostForm, ReplyForm, ReplyFilterForm
 from newsportal.models import Profile, Post, Category, Reply
@@ -174,3 +177,28 @@ class ReplyCreateView(LoginRequiredMixin, CreateView):
 
         send_mail(subject, message, from_email, recipient_list)
         return super().form_valid(form)
+
+class PostUpdateView(UpdateView):
+    model = Post
+
+    template_name = 'post_update.html'
+    photo = forms.ImageField(required=False)
+    video = forms.FileField(required=False)
+    fields = ['title', 'content_text', 'photo', 'video', 'categories']
+    success_url = '/posts/'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_authenticated:
+            return HttpResponseForbidden('Вы не залогинились')
+        self.object = self.get_object()
+        if self.object.author != self.request.user:
+            return HttpResponseForbidden("Вы не можете редактировать чужие объявления")
+        return super().dispatch(request, *args, **kwargs)
+
+
+
+
+
+
+
+

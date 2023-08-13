@@ -31,6 +31,9 @@
 
     <br>
     <a href="{% url 'create_reply' post_id=post.id %}" class="btn btn-primary">Оставить отзыв</a>
+    {% if user.is_authenticated and user == post.author %}
+      <a href="{% url 'post_update' pk=post.pk %}">Редактировать</a>
+    {% endif %}
     <p>
     <h3>Отзывы</h3>
   <ul>
