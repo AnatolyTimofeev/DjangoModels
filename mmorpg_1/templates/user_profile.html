@@ -1,0 +1,31 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+  <h2>Личный кабинет пользователя: {{ user.username }}</h2>
+  <p>Email: {{ user.email }}</p>
+  <form method="get">
+        {{ reply_filter_form.as_p }}
+        <button type="submit">Применить фильтр</button>
+    </form>
+  <ul>
+    {% for reply in user_replies %}
+            <li>
+                Отклик на объявление "{{ reply.reply.title }}": автор - {{reply.user.username}} -- {{ reply.text }}
+                <form method="post" action="{% url 'delete_reply' reply.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Удалить</button>
+                </form>
+                {% if not reply.is_accepted %}
+                    <form method="post" action="{% url 'accept_reply' reply.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Принять</button>
+                    </form>
+                {% else %}
+                    <p>Отклик принят</p>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>На ваши объявления пока нет откликов.</li>
+        {% endfor %}
+</ul>
+{% endblock %}

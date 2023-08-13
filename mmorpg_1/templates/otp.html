@@ -1,0 +1,11 @@
+{% block content %}
+  <h2>Подтверждение одноразового кода</h2>
+  {% if error_message %}
+    <p class="error">{{ error_message }}</p>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Подтвердить</button>
+  </form>
+{% endblock %}

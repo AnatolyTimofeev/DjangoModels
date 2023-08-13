@@ -1,0 +1,49 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block content %}
+
+  <h1>Список постов</h1>
+
+  <ul>
+    {% for post in posts %}
+
+
+      <li>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content_text }}</p>
+        <p>Categories: {% for category in post.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+
+        {% if post.photo %}
+      <img src="{{ post.photo.url }}" alt="Фото"
+           width= "300"
+           height="300">
+    {% endif %}
+
+        {% if post.video %}
+          <video controls width="300" height="200">
+            <source src="{{ post.video.url }}" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+        {% endif %}
+
+      </li>
+
+    <br>
+    <a href="{% url 'create_reply' post_id=post.id %}" class="btn btn-primary">Оставить отзыв</a>
+    <p>
+    <h3>Отзывы</h3>
+  <ul>
+      {% for reply in post.replies.all %}
+        {% if reply.is_accepted %}
+          <li>
+            <p>{{ reply.text }}</p>
+            <small>{{ reply.user.username }} - {{ reply.created_at }}</small>
+          </li>
+        {% endif%}
+      {% endfor %}
+    <hr style="color: black;">
+    {% endfor %}
+  </ul>
+
+{% endblock %}
